@@ -12,6 +12,7 @@
 
 from sqlalchemy import Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
+
 from fastapi_ci_linters.homework.database import Base
 
 

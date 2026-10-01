@@ -12,14 +12,16 @@
   - получение рецепта по ID с увеличением счётчика просмотров.
 """
 
-from fastapi import FastAPI, Depends, HTTPException
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
+
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from fastapi_ci_linters.homework.database import Base, engine, get_session
 from fastapi_ci_linters.homework.models import RecipesModel
 from fastapi_ci_linters.homework.schemas import RecipeCreate, RecipeRead
-from sqlalchemy import select, update
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
 
 async def setup_database() -> None:

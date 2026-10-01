@@ -1,9 +1,11 @@
 import pytest
-from httpx import AsyncClient, ASGITransport
-from homework.main import app
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
+                                    create_async_engine)
 from sqlalchemy.pool import StaticPool
+
 from homework.database import Base, get_session
+from homework.main import app
 
 BASE_URL = "http://test"
 TEST_DATABASE_URL = "sqlite+aiosqlite:///./test_recipes.db"
