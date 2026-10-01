@@ -12,12 +12,12 @@
   - получение рецепта по ID с увеличением счётчика просмотров.
 """
 
-from fastapi import FastAPI,Depends,HTTPException
+from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi_ci_linters.homework.database import Base,engine,get_session
+from fastapi_ci_linters.homework.database import Base, engine, get_session
 from fastapi_ci_linters.homework.models import RecipesModel
-from fastapi_ci_linters.homework.schemas import RecipeCreate,RecipeRead
-from sqlalchemy import select,update
+from fastapi_ci_linters.homework.schemas import RecipeCreate, RecipeRead
+from sqlalchemy import select, update
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
@@ -32,18 +32,29 @@ async def setup_database() -> None:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     await setup_database()
     yield
 
+
 app = FastAPI(
     lifespan=lifespan,
     title="Recipes API",
-    description="API для управления рецептами блюд: создание, получение списка и деталей.")
+    description="API для управления рецептами блюд: создание, получение списка и деталей.",
+)
 
-@app.post("/add_recipe",response_model=RecipeRead,tags=["Рецепты"],summary="Добавить новый рецепт")
-async def create_recipe(recipe: RecipeCreate, db: AsyncSession = Depends(get_session)) -> RecipesModel:
+
+@app.post(
+    "/add_recipe",
+    response_model=RecipeRead,
+    tags=["Рецепты"],
+    summary="Добавить новый рецепт",
+)
+async def create_recipe(
+    recipe: RecipeCreate, db: AsyncSession = Depends(get_session)
+) -> RecipesModel:
     """
     Создаёт новый рецепт в базе данных.
 
@@ -78,7 +89,13 @@ async def create_recipe(recipe: RecipeCreate, db: AsyncSession = Depends(get_ses
     await db.refresh(db_recipe)
     return db_recipe
 
-@app.get("/recipes", response_model=list[RecipeRead],tags=["Рецепты"],summary="Получить все рецепты")
+
+@app.get(
+    "/recipes",
+    response_model=list[RecipeRead],
+    tags=["Рецепты"],
+    summary="Получить все рецепты",
+)
 async def get_recipes(db: AsyncSession = Depends(get_session)):
     """
     Возвращает список всех рецептов из базы данных.
@@ -96,7 +113,13 @@ async def get_recipes(db: AsyncSession = Depends(get_session)):
     recipes = result.scalars().all()
     return recipes
 
-@app.get("/recipes/{recipe_id}", response_model=RecipeRead,tags=["Рецепты"],summary="Получить конкретный рецепт")
+
+@app.get(
+    "/recipes/{recipe_id}",
+    response_model=RecipeRead,
+    tags=["Рецепты"],
+    summary="Получить конкретный рецепт",
+)
 async def get_recipe(recipe_id: int, db: AsyncSession = Depends(get_session)):
     """
     Получает детальную информацию о рецепте по его уникальному идентификатору.

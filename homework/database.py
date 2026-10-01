@@ -16,27 +16,29 @@
 """
 
 from typing import AsyncGenerator
-from sqlalchemy.ext.asyncio import AsyncSession,create_async_engine,async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
-
 
 # Создание асинхронного движка
 engine = create_async_engine("sqlite+aiosqlite:///my_recipes.db")
 
 # Фабрика асинхронных сессий
-async_session_maker = async_sessionmaker(engine,
-                                         expire_on_commit=False,  # Не истекать объекты после commit
-                                         autoflush=False, # Отключить авто-flush
-                                         autocommit=False,# Отключить авто-commit
-                                         class_=AsyncSession,  # Явно указываем класс сессии
-                                         )
+async_session_maker = async_sessionmaker(
+    engine,
+    expire_on_commit=False,  # Не истекать объекты после commit
+    autoflush=False,  # Отключить авто-flush
+    autocommit=False,  # Отключить авто-commit
+    class_=AsyncSession,  # Явно указываем класс сессии
+)
+
 
 class Base(DeclarativeBase):
     """Базовый класс для всех ORM-моделей.
         Все модели должны наследоваться от этого класса для регистрации
     метаданных и создания таблиц в базе данных."""
 
-async def get_session()-> AsyncGenerator[AsyncSession, None]:
+
+async def get_session() -> AsyncGenerator[AsyncSession, None]:
     """Генератор сессии для использования в зависимостях FastAPI.
         Создаёт новую асинхронную сессию базы данных для каждого запроса
     и автоматически закрывает её после завершения обработки запроса.
@@ -53,5 +55,3 @@ async def get_session()-> AsyncGenerator[AsyncSession, None]:
 async def close_db():
     """Корректно закрывает все соединения с БД при остановке приложения."""
     await engine.dispose()
-
-

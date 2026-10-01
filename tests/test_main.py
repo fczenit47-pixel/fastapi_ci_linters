@@ -5,7 +5,6 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sess
 from sqlalchemy.pool import StaticPool
 from homework.database import Base, get_session
 
-
 BASE_URL = "http://test"
 TEST_DATABASE_URL = "sqlite+aiosqlite:///./test_recipes.db"
 
@@ -22,7 +21,8 @@ async_session_maker = async_sessionmaker(
     expire_on_commit=False,
 )
 
-#@pytest.fixture(scope="session", autouse=True)
+
+# @pytest.fixture(scope="session", autouse=True)
 @pytest.fixture(scope="module")
 async def init_test_db():
     """
@@ -73,14 +73,14 @@ async def client(db_session):
 
 
 @pytest.mark.anyio
-async def test_add_recipe(client,init_test_db):
+async def test_add_recipe(client, init_test_db):
     """Тест создания рецепта."""
     recipe_data = {
         "name_dish": "Тестовый рецепт",
         "views": 0,
         "cooking_time": 30,
         "ingredients": "Ингредиент 1, Ингредиент 2",
-        "description": "Описание тестового рецепта"
+        "description": "Описание тестового рецепта",
     }
 
     response = await client.post("/add_recipe", json=recipe_data)
@@ -93,7 +93,7 @@ async def test_add_recipe(client,init_test_db):
 
 
 @pytest.mark.anyio
-async def test_get_all_recipes(client,init_test_db):
+async def test_get_all_recipes(client, init_test_db):
     """Тест получения всех рецептов."""
     response = await client.get("/recipes")
 

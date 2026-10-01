@@ -9,7 +9,8 @@
 Хранит информацию о рецептах блюд: название, время приготовления, ингредиенты,
 описание и счётчик просмотров.
 """
-from sqlalchemy import Integer, String,Text
+
+from sqlalchemy import Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 from fastapi_ci_linters.homework.database import Base
 
@@ -20,9 +21,11 @@ class RecipesModel(Base):
     Соответствует таблице all_recipes в базе данных.
     Используется для сохранения, загрузки и изменения записей о рецептах.
     """
+
     __tablename__ = "all_recipes"
 
-    id: Mapped[int] = mapped_column(Integer,
+    id: Mapped[int] = mapped_column(
+        Integer,
         primary_key=True,
         index=True,
         autoincrement=True,
