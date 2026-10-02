@@ -151,7 +151,7 @@ async def get_recipe(recipe_id: int, db: AsyncSession = Depends(get_session)):
     )
     result = await db.execute(stmt)
 
-    if result.rowcount == 0:
+    if result.rowcount == 0: # type: ignore[attr-defined]
         raise HTTPException(status_code=404, detail="Рецепт не найден")
 
     await db.commit()
