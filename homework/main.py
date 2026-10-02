@@ -19,9 +19,9 @@ from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from fastapi_ci_linters.homework.database import Base, engine, get_session
-from fastapi_ci_linters.homework.models import RecipesModel
-from fastapi_ci_linters.homework.schemas import RecipeCreate, RecipeRead
+from homework.database import Base, engine, get_session
+from homework.models import RecipesModel
+from homework.schemas import RecipeCreate, RecipeRead
 
 
 async def setup_database() -> None:
