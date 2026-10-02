@@ -2,9 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
   pull_request:
-    branches: [main]
 
 jobs:
   lint-and-test:
@@ -38,7 +36,7 @@ jobs:
 
       - name: Run mypy
         run: |
-          mypy . --explicit-package-bases
+          mypy . 
 
       - name: Run pytest
         run: |
